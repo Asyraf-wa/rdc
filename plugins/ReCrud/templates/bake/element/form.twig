@@ -1,0 +1,168 @@
+{#
+/**
+ * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
+ * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
+ *
+ * Licensed under The MIT License
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @link          http://cakephp.org CakePHP(tm) Project
+ * @since         2.0.0
+ * @license       http://www.opensource.org/licenses/mit-license.php MIT License
+ */
+#}
+{% set fields = Bake.filterFields(fields, schema, modelObject) %}
+<?php
+	echo $this->Html->css('select2/css/select2.css');
+	echo $this->Html->script('select2/js/select2.full.min.js');
+	echo $this->Html->script('ckeditor/ckeditor');
+	$c_name = $this->request->getParam('controller');
+?>
+
+<div class="horizontal_menu">
+<div class="btn-group">
+  <button type="button" class="btn btn-outline btn-sm btn-flat" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <i class="fas fa-bars text-primary"></i>
+  </button>
+  <div class="dropdown-menu dropdown-menu-right">
+{% if 'add' not in action %}
+
+			<?= $this->Html->link(__('<i class="far fa-trash-alt"></i> Dispose'), ['action' => 'transferDisposed', ${{ singularVar }}->{{ primaryKey[0] }}], ['class' => 'dropdown-item', 'data-toggle' => 'modal', 'data-target' => '#disposed' . ${{ singularVar }}->{{ primaryKey[0] }}, 'escape' => false]) ?>
+			
+{% endif %}
+			<?= $this->Html->link(__('<i class="fas fa-list"></i> List'), ['action' => 'index'], ['class' => 'dropdown-item', 'escape' => false]) ?>
+            {{- "\n" }}
+{%- set done = [] %}
+  </div>
+</div>
+</div>
+
+<div class="row">
+	<div class="col-md-4">	
+		<div class="card2">
+		  <div class="header">
+				<div class="panel_card2_title">Term and Conditions</div>
+				<div class="panel_card2_subtitle"><?= $organization_name; ?></div>
+		  </div>
+		  <div class="body">
+			You need to comply the followings terms:
+		<ul>
+			<li>All information is true &amp; valid</li>
+			<li>All registered information is belong to the system.</li>
+		</ul>
+		  </div>
+		</div>
+		
+	</div>
+	<div class="col-md-8">
+		<div class="card2">
+		  <div class="header">
+				<div class="panel_card2_title"><?= __('{{ action|humanize }} {{ singularHumanName }}') ?></div>
+				<div class="panel_card2_subtitle"><?= $organization_name; ?></div>
+		  </div>
+		  <div class="body">
+            <?= $this->Form->create(${{ singularVar }}) ?>
+            <fieldset>
+{% for field in fields %}
+{%- if field not in primaryKey %}
+    {%- if keyFields[field] %}
+        {%- set fieldData = Bake.columnData(field, schema) %}
+        {%- if fieldData.null %}
+                <?php echo $this->Form->control('{{ field }}', ['options' => ${{ keyFields[field] }}, 'empty' => true]); ?>
+                    {{- "\n" }}
+        {%- else %}
+                <?php echo $this->Form->control('{{ field }}', ['options' => ${{ keyFields[field] }}]); ?>
+                    {{- "\n" }}
+        {%- endif %}
+    {%- elseif field not in ['created', 'modified', 'updated','rm_retention','disposed_on','disposed_by','hits','slug','rm_act_on','rm_act_by','archived_on','archived_by'] %}
+        {%- set fieldData = Bake.columnData(field, schema) %}
+        {%- if fieldData.type in ['date', 'datetime', 'time'] and fieldData.null %}
+                <?php echo $this->Form->control('{{ field }}', ['empty' => true]); ?>
+                    {{- "\n" }}
+        {%- else %}
+				<div class="form-group">
+					<?php echo $this->Form->control('{{ field }}', ['class' => 'form-control','required' => false]); ?>
+				</div>
+                    {{- "\n" }}
+        {%- endif %}
+    {%- endif %}
+{%- endif %}
+{%- endfor %}
+
+{%- if associations.BelongsToMany %}
+{%- for assocName, assocData in associations.BelongsToMany %}
+                    <?php echo $this->Form->control('{{ assocData.property }}._ids', ['options' => ${{ assocData.variable }}]); ?>
+                    {{- "\n" }}
+{%- endfor %}
+{% endif %}
+{% if 'add' in action %}
+<label>Retention Duration</label>
+	<?php 
+	$sixMonth = date('Y-m-d', strtotime(date("Y-m-d") . ' 6 Month'));
+	$oneYear = date('Y-m-d', strtotime(date("Y-m-d") . ' 1 Year'));
+	$threeYear = date('Y-m-d', strtotime(date("Y-m-d") . ' 3 Year'));
+	$fiveYear = date('Y-m-d', strtotime(date("Y-m-d") . ' 5 Year'));
+	$sevenYear = date('Y-m-d', strtotime(date("Y-m-d") . ' 7 Year'));
+	?>
+	<div class="radio-toolbar">
+		<?php echo $this->Form->radio(
+				'rm_retention',
+				[
+					['value' => $sixMonth, 'text' => '6 Month'],
+					['value' => $oneYear, 'text' => '1 Year'],
+					['value' => $threeYear, 'text' => '3 Year'],
+					['value' => $fiveYear, 'text' => '5 Year'],
+					['value' => $sevenYear, 'text' => '7 Year'],
+				],
+				['class' => 'form-control','required' => false]
+			);
+			if ($this->Form->isFieldError('rm_retention')) {
+				echo $this->Form->error('rm_retention', 'Please select retention duration');
+			} ?>
+	</div>
+{% endif %}
+            </fieldset>
+		  </div>
+				<div class="card-footer pull-right">
+				  <?= $this->Form->button('Reset', ['type' => 'reset', 'class' => 'btn btn-outline-primary btn-flat']) ?>
+				  <?= $this->Form->button(__('Submit'),['type' => 'submit', 'class' => 'btn btn-outline-primary btn-flat']) ?>
+				  <?= $this->Form->end() ?>
+                </div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+$(document).ready(function() {
+  $(".input select").select2();
+});
+</script>
+{% if 'add' not in action %}
+<!--Disposed Modal-->
+<div class="modal fade" id="disposed<?= ${{ singularVar }}->{{ primaryKey[0] }}; ?>">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content bg-danger">
+		<div class="modal-header">
+			<h4 class="modal-title">Disposition Request</h4>
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+		<div class="modal-body">
+			<ul class="">
+				<li>You're requesting to dispose the record id: <strong><?= ${{ singularVar }}->{{ primaryKey[0] }}; ?></strong> from <strong><?= $c_name; ?></strong> repository.</li>
+				<li>Please note that this operation is not reversible</li>
+				<li>The record will be disposed and recorded into the disposal list</li>
+				<li>This disposition is authorized by <strong><?= $auth_username; ?> (<?= $auth_email; ?>)</strong> on <?= date('F d, Y'); ?></li>
+			</ul>
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btn btn-outline-light btn-flat" data-dismiss="modal">No</button>
+			<?= $this->Form->postLink(__('Yes'), ['action' => 'transferDisposed', ${{ singularVar }}->{{ primaryKey[0] }}], ['class' => 'btn btn-outline-light btn-flat']); ?>
+		</div>
+		</div>
+	</div>
+</div>
+{% endif %}

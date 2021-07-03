@@ -1,0 +1,52 @@
+html { margin: 0px}
+@page { 
+	margin: 0px 0px 0px 0px !important;
+	padding: 0px 0px 0px 0px !important;
+	font-family: 'Roboto', sans-serif;
+    font-size: 12px
+}
+body {
+  margin: 0px;
+  background-color: #ffffff;
+}
+.header {
+	background-color: #ffffff;
+}
+.footer {
+    /*background-color: #ffffff;*/
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    overflow:hidden;
+}
+.footerQR{
+	text-align: right;
+	margin: 0px 70px 0px 0px; /* Top,Right,Bottom,Left */
+}
+.content {
+	margin: 0px 60px 0px 60px; /* Top,Right,Bottom,Left */
+	text-align: justify;
+}
+.justify {
+    text-align: justify;
+}
+.title{
+	font-family: 'Abel', sans-serif;
+    font-size: 18px;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+.h1{
+	font-family: 'Abel', sans-serif;
+    font-size: 20px;
+    text-transform: uppercase;
+    font-weight: bold;
+	text-align: center;
+	text-decoration: underline;
+	margin-bottom: 40px;
+}
+
+
+
+

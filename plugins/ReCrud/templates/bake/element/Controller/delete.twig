@@ -1,0 +1,439 @@
+{#
+/**
+ * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
+ * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
+ *
+ * Licensed under The MIT License
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @link          http://cakephp.org CakePHP(tm) Project
+ * @since         2.0.0
+ * @license       http://www.opensource.org/licenses/mit-license.php MIT License
+ */
+#}
+    /**
+     * Delete method
+     *
+     * @param string|null $id {{ singularHumanName }} id.
+     * @return \Cake\Http\Response|null|void Redirects to index.
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     */
+    public function delete($id = null)
+    {
+		EventManager::instance()->on('AuditStash.beforeLog', function ($event, array $logs) {
+			foreach ($logs as $log) {
+				$log->setMetaInfo($log->getMetaInfo() + ['a_name' => 'Delete']);
+				$log->setMetaInfo($log->getMetaInfo() + ['c_name' => '{{ currentModelName }}']);
+			}
+		});
+		
+		${{ pluralName }} = TableRegistry::get('{{ currentModelName }}');
+		$query = ${{ pluralName }}->query();
+		$query->update()
+			->set(['disposed_by' => $this->Auth->user('id')])
+			->where(['id' => $id])
+			->execute();
+		
+        $this->request->allowMethod(['post', 'delete']);
+        ${{ singularName }} = $this->{{ currentModelName }}->get($id);
+        if ($this->{{ currentModelName }}->delete(${{ singularName }})) {
+            $this->Flash->success(__('The {{ singularHumanName|lower }} has been deleted.'));
+        } else {
+            $this->Flash->error(__('The {{ singularHumanName|lower }} could not be deleted. Please, try again.'));
+        }
+
+        return $this->redirect(['action' => 'index']);
+    }
+	
+	public function deleteAll()
+	{
+		$this->request->allowMethod(['post','delete']);
+		$ids = $this->request->getData('ids');
+		
+		if($this->{{ currentModelName }}->deleteAll(['{{ currentModelName }}.id IN'=>$ids])){
+			$this->Flash->success(__('The selected {{ singularName }} has been deleted.'));
+		} else {
+			$this->Flash->error(__('Please select {{ singularName }} to delete'));
+		}
+			return $this->redirect(['action' => 'index']);
+	}
+	
+	public function change()
+	{
+		if($this->getRequest()->is('post')) {
+			$check = $this->request->getData('check');
+			$status = $this->request->getData('status');
+			
+			$this->{{ currentModelName }}->updateAll(
+				['status ' => $status ],
+				['id IN' => $check]
+			);
+			$this->Flash->success(__('The selected action has been succesfully executed'));
+			return $this->redirect($this->referer());
+		}
+	}
+	
+	public function pdf($id = null)
+	{
+		$this->viewBuilder()->enableAutoLayout(false); 
+		${{ singularName }} = $this->{{ currentModelName }}->get($id);
+		$this->viewBuilder()->setClassName('CakePdf.pdf');
+		$this->viewBuilder()->setOption(
+			'pdfConfig',
+			[
+				'orientation' => 'portrait',
+				'download' => true, // This can be omitted if "filename" is specified.
+				'filename' => '{{ singularName }}_' . $id . '.pdf' //// This can be omitted if you want file name based on URL.
+			]
+		);
+		$this->set('{{ singularName }}', ${{ singularName }});
+	}
+
+	
+	public function csv()
+	{
+		$this->response = $this->response->withDownload('{{ pluralName }}_list.csv');
+		${{ pluralName }} = $this->{{ currentModelName }}->find();
+		$_serialize = '{{ pluralName }}';
+		//$_header = ['ID', 'status', 'Created', 'Modified']; //include specific header
+		//$_extract = ['id', 'status', 'created', 'modified']; //include specific data
+
+		$this->viewBuilder()->setClassName('CsvView.Csv');
+		$this->set(compact('{{ pluralName }}', '_serialize')); //include the _header and _extract ifany
+	}
+	
+	public function search()
+	{
+		$this->paginate['maxLimit'] = 999;
+
+		${{ pluralName }} = $this->paginate($this->{{ currentModelName }}->find('search', ['search' => $this->request->getQuery()]));
+		$this->set('count_search_result', $this->{{ currentModelName }}->find('search', ['search' => $this->request->getQuery()])->count());
+
+		$this->set(compact('{{ pluralName }}'));
+		$this->set('_serialize', ['{{ pluralName }}']);
+	}
+	
+	public function retentionList()
+    {
+		$this->set('{{ pluralName }}', $this->paginate($this->{{ currentModelName }}->find('all')
+				->where([
+					'{{ currentModelName }}.rm_retention <=' => date('Y-m-d'),
+					'{{ currentModelName }}.status' => 1,
+					])
+		));	
+		$this->set('count_find_result', $this->{{ currentModelName }}->find()
+				->where(['status' => '1', 'rm_retention <=' => date('Y-m-d'),])->count());
+    }
+	
+	public function transferArchived($id=null)
+	{
+		$this->request->allowMethod(['post']);
+		${{ singularName }} = $this->{{ currentModelName }}->get($id);
+		$updateData = [
+				'status' => 2, //archived
+				'rm_act_on' => date("Y-m-d H:i:s"),
+				'rm_act_by' => $this->Auth->user('id')				
+			]; 
+			$this->{{ currentModelName }}->query()->update()->set($updateData)->where(['id' => ${{ singularName }}['id']])->execute();
+			$this->Flash->success(__('The {{ singularName }} has been transfer to archived.'));
+		return $this->redirect($this->referer());
+	}
+	
+	public function transferDisposed($id=null)
+	{
+		$this->request->allowMethod(['post']);
+		${{ singularName }} = $this->{{ currentModelName }}->get($id);
+		$updateData = [
+				'status' => 3, //disposed
+				'rm_act_on' => date("Y-m-d H:i:s"),
+				'rm_act_by' => $this->Auth->user('id')				
+			]; 
+			$this->{{ currentModelName }}->query()->update()->set($updateData)->where(['id' => ${{ singularName }}['id']])->execute();
+			$this->Flash->success(__('The {{ singularName }} has been disposed.'));
+		return $this->redirect($this->referer());
+	}
+	
+	public function recordActive($id=null,$status)
+	{
+		${{ pluralName }} = TableRegistry::get('{{ currentModelName }}');
+		$query = ${{ pluralName }}->query();
+		$query->update()
+			->set($query->newExpr('status = 1'))
+			->where(['id' => $id])
+			->execute();
+			
+		return $this->redirect($this->referer());
+	}
+	
+	public function recordInactive($id=null,$status)
+	{
+		${{ pluralName }} = TableRegistry::get('{{ currentModelName }}');
+		$query = ${{ pluralName }}->query();
+		$query->update()
+			->set($query->newExpr('status = 2'))
+			->where(['id' => $id])
+			->execute();
+			
+		return $this->redirect($this->referer());
+	}
+	
+    public function report()
+    {
+{% set belongsTo = Bake.aliasExtractor(modelObj, 'BelongsTo') %}
+{% if belongsTo %}
+        $this->paginate = [
+            'contain' => [{{ Bake.stringifyList(belongsTo, {'indent': false})|raw }}],
+        ];
+{% endif %}
+        ${{ pluralName }} = $this->paginate($this->{{ currentModelName }});
+		
+		$this->set('total', $this->{{ currentModelName }}->find()->count());
+		$this->set('total_status_0', $this->{{ currentModelName }}->find()->where(['status' => '0'])->count());
+		$this->set('total_status_1', $this->{{ currentModelName }}->find()->where(['status' => '1'])->count());
+		$this->set('total_status_2', $this->{{ currentModelName }}->find()->where(['status' => '2'])->count());
+		$this->set('total_status_3', $this->{{ currentModelName }}->find()->where(['status' => '3'])->count());
+//Current year count
+		$this->set('total_current_year', $this->{{ currentModelName }}->find()
+		->where([
+				'YEAR({{ currentModelName }}.created)' => date('Y')
+		])->count());
+		
+		$this->set('q1', $this->{{ currentModelName }}->find()
+			->where([
+				'MONTH({{ currentModelName }}.created) >=' => date('1'),
+				'MONTH({{ currentModelName }}.created) <=' => date('6'),
+				'YEAR({{ currentModelName }}.created)' => date('Y')
+			])->count());
+
+		$this->set('q2', $this->{{ currentModelName }}->find()
+			->where([
+				'MONTH({{ currentModelName }}.created) >=' => date('7'),
+				'MONTH({{ currentModelName }}.created) <=' => date('12'),
+				'YEAR({{ currentModelName }}.created)' => date('Y')
+			])->count());
+	
+		$this->set('jan', $this->{{ currentModelName }}->find()
+			->where([
+				'MONTH({{ currentModelName }}.created)' => date('1'),
+				'YEAR({{ currentModelName }}.created)' => date('Y')
+			])->count());
+		$this->set('feb', $this->{{ currentModelName }}->find()
+			->where([
+				'MONTH({{ currentModelName }}.created)' => date('2'),
+				'YEAR({{ currentModelName }}.created)' => date('Y')
+			])->count());
+		$this->set('mar', $this->{{ currentModelName }}->find()
+			->where([
+				'MONTH({{ currentModelName }}.created)' => date('3'),
+				'YEAR({{ currentModelName }}.created)' => date('Y')
+			])->count());
+		$this->set('apr', $this->{{ currentModelName }}->find()
+			->where([
+				'MONTH({{ currentModelName }}.created)' => date('4'),
+				'YEAR({{ currentModelName }}.created)' => date('Y')
+			])->count());
+		$this->set('may', $this->{{ currentModelName }}->find()
+			->where([
+				'MONTH({{ currentModelName }}.created)' => date('5'),
+				'YEAR({{ currentModelName }}.created)' => date('Y')
+			])->count());
+		$this->set('jun', $this->{{ currentModelName }}->find()
+			->where([
+				'MONTH({{ currentModelName }}.created)' => date('6'),
+				'YEAR({{ currentModelName }}.created)' => date('Y')
+			])->count());
+		$this->set('jul', $this->{{ currentModelName }}->find()
+			->where([
+				'MONTH({{ currentModelName }}.created)' => date('7'),
+				'YEAR({{ currentModelName }}.created)' => date('Y')
+			])->count());
+		$this->set('aug', $this->{{ currentModelName }}->find()
+			->where([
+				'MONTH({{ currentModelName }}.created)' => date('8'),
+				'YEAR({{ currentModelName }}.created)' => date('Y')
+			])->count());
+		$this->set('sep', $this->{{ currentModelName }}->find()
+			->where([
+				'MONTH({{ currentModelName }}.created)' => date('9'),
+				'YEAR({{ currentModelName }}.created)' => date('Y')
+			])->count());
+		$this->set('oct', $this->{{ currentModelName }}->find()
+			->where(
+				['MONTH({{ currentModelName }}.created)' => date('10'),
+				'YEAR({{ currentModelName }}.created)' => date('Y')
+			])->count());
+		$this->set('nov', $this->{{ currentModelName }}->find()
+			->where([
+				'MONTH({{ currentModelName }}.created)' => date('11'),
+				'YEAR({{ currentModelName }}.created)' => date('Y')
+			])->count());
+		$this->set('dec', $this->{{ currentModelName }}->find()
+			->where([
+				'MONTH({{ currentModelName }}.created)' => date('12'),
+				'YEAR({{ currentModelName }}.created)' => date('Y')
+			])->count());
+//-1 year count	
+		$this->set('total_1', $this->{{ currentModelName }}->find()
+		->where([
+				'YEAR({{ currentModelName }}.created)' => date('Y',strtotime('-1 year'))
+		])->count());
+		
+		$this->set('q1_1', $this->{{ currentModelName }}->find()
+			->where([
+				'MONTH({{ currentModelName }}.created) >=' => date('1'),
+				'MONTH({{ currentModelName }}.created) <=' => date('6'),
+				'YEAR({{ currentModelName }}.created)' => date('Y',strtotime('-1 year'))
+			])->count());
+
+		$this->set('q2_1', $this->{{ currentModelName }}->find()
+			->where([
+				'MONTH({{ currentModelName }}.created) >=' => date('7'),
+				'MONTH({{ currentModelName }}.created) <=' => date('12'),
+				'YEAR({{ currentModelName }}.created)' => date('Y',strtotime('-1 year'))
+			])->count());
+			
+		$this->set('jan_1', $this->{{ currentModelName }}->find()
+			->where([
+				'MONTH({{ currentModelName }}.created)' => date('1'),
+				'YEAR({{ currentModelName }}.created)' => date('Y',strtotime('-1 year'))
+			])->count());
+		$this->set('feb_1', $this->{{ currentModelName }}->find()
+			->where([
+				'MONTH({{ currentModelName }}.created)' => date('2'),
+				'YEAR({{ currentModelName }}.created)' => date('Y',strtotime('-1 year'))
+			])->count());
+		$this->set('mar_1', $this->{{ currentModelName }}->find()
+			->where([
+				'MONTH({{ currentModelName }}.created)' => date('3'),
+				'YEAR({{ currentModelName }}.created)' => date('Y',strtotime('-1 year'))
+			])->count());
+		$this->set('apr_1', $this->{{ currentModelName }}->find()
+			->where([
+				'MONTH({{ currentModelName }}.created)' => date('4'),
+				'YEAR({{ currentModelName }}.created)' => date('Y',strtotime('-1 year'))
+			])->count());
+		$this->set('may_1', $this->{{ currentModelName }}->find()
+			->where([
+				'MONTH({{ currentModelName }}.created)' => date('5'),
+				'YEAR({{ currentModelName }}.created)' => date('Y',strtotime('-1 year'))
+			])->count());
+		$this->set('jun_1', $this->{{ currentModelName }}->find()
+			->where([
+				'MONTH({{ currentModelName }}.created)' => date('6'),
+				'YEAR({{ currentModelName }}.created)' => date('Y',strtotime('-1 year'))
+			])->count());
+		$this->set('jul_1', $this->{{ currentModelName }}->find()
+			->where([
+				'MONTH({{ currentModelName }}.created)' => date('7'),
+				'YEAR({{ currentModelName }}.created)' => date('Y',strtotime('-1 year'))
+			])->count());
+		$this->set('aug_1', $this->{{ currentModelName }}->find()
+			->where([
+				'MONTH({{ currentModelName }}.created)' => date('8'),
+				'YEAR({{ currentModelName }}.created)' => date('Y',strtotime('-1 year'))
+			])->count());
+		$this->set('sep_1', $this->{{ currentModelName }}->find()
+			->where([
+				'MONTH({{ currentModelName }}.created)' => date('9'),
+				'YEAR({{ currentModelName }}.created)' => date('Y',strtotime('-1 year'))
+			])->count());
+		$this->set('oct_1', $this->{{ currentModelName }}->find()
+			->where(
+				['MONTH({{ currentModelName }}.created)' => date('10'),
+				'YEAR({{ currentModelName }}.created)' => date('Y',strtotime('-1 year'))
+			])->count());
+		$this->set('nov_1', $this->{{ currentModelName }}->find()
+			->where([
+				'MONTH({{ currentModelName }}.created)' => date('11'),
+				'YEAR({{ currentModelName }}.created)' => date('Y',strtotime('-1 year'))
+			])->count());
+		$this->set('dec_1', $this->{{ currentModelName }}->find()
+			->where([
+				'MONTH({{ currentModelName }}.created)' => date('12'),
+				'YEAR({{ currentModelName }}.created)' => date('Y',strtotime('-1 year'))
+			])->count());
+//-2 year count	
+				$this->set('total_2', $this->{{ currentModelName }}->find()
+		->where([
+				'YEAR({{ currentModelName }}.created)' => date('Y',strtotime('-2 year'))
+		])->count());
+		
+		$this->set('q1_2', $this->{{ currentModelName }}->find()
+			->where([
+				'MONTH({{ currentModelName }}.created) >=' => date('1'),
+				'MONTH({{ currentModelName }}.created) <=' => date('6'),
+				'YEAR({{ currentModelName }}.created)' => date('Y',strtotime('-2 year'))
+			])->count());
+
+		$this->set('q2_2', $this->{{ currentModelName }}->find()
+			->where([
+				'MONTH({{ currentModelName }}.created) >=' => date('7'),
+				'MONTH({{ currentModelName }}.created) <=' => date('12'),
+				'YEAR({{ currentModelName }}.created)' => date('Y',strtotime('-2 year'))
+			])->count());
+			
+		$this->set('jan_2', $this->{{ currentModelName }}->find()
+			->where([
+				'MONTH({{ currentModelName }}.created)' => date('1'),
+				'YEAR({{ currentModelName }}.created)' => date('Y',strtotime('-2 year'))
+			])->count());
+		$this->set('feb_2', $this->{{ currentModelName }}->find()
+			->where([
+				'MONTH({{ currentModelName }}.created)' => date('2'),
+				'YEAR({{ currentModelName }}.created)' => date('Y',strtotime('-2 year'))
+			])->count());
+		$this->set('mar_2', $this->{{ currentModelName }}->find()
+			->where([
+				'MONTH({{ currentModelName }}.created)' => date('3'),
+				'YEAR({{ currentModelName }}.created)' => date('Y',strtotime('-2 year'))
+			])->count());
+		$this->set('apr_2', $this->{{ currentModelName }}->find()
+			->where([
+				'MONTH({{ currentModelName }}.created)' => date('4'),
+				'YEAR({{ currentModelName }}.created)' => date('Y',strtotime('-2 year'))
+			])->count());
+		$this->set('may_2', $this->{{ currentModelName }}->find()
+			->where([
+				'MONTH({{ currentModelName }}.created)' => date('5'),
+				'YEAR({{ currentModelName }}.created)' => date('Y',strtotime('-2 year'))
+			])->count());
+		$this->set('jun_2', $this->{{ currentModelName }}->find()
+			->where([
+				'MONTH({{ currentModelName }}.created)' => date('6'),
+				'YEAR({{ currentModelName }}.created)' => date('Y',strtotime('-2 year'))
+			])->count());
+		$this->set('jul_2', $this->{{ currentModelName }}->find()
+			->where([
+				'MONTH({{ currentModelName }}.created)' => date('7'),
+				'YEAR({{ currentModelName }}.created)' => date('Y',strtotime('-2 year'))
+			])->count());
+		$this->set('aug_2', $this->{{ currentModelName }}->find()
+			->where([
+				'MONTH({{ currentModelName }}.created)' => date('8'),
+				'YEAR({{ currentModelName }}.created)' => date('Y',strtotime('-2 year'))
+			])->count());
+		$this->set('sep_2', $this->{{ currentModelName }}->find()
+			->where([
+				'MONTH({{ currentModelName }}.created)' => date('9'),
+				'YEAR({{ currentModelName }}.created)' => date('Y',strtotime('-2 year'))
+			])->count());
+		$this->set('oct_2', $this->{{ currentModelName }}->find()
+			->where(
+				['MONTH({{ currentModelName }}.created)' => date('10'),
+				'YEAR({{ currentModelName }}.created)' => date('Y',strtotime('-2 year'))
+			])->count());
+		$this->set('nov_2', $this->{{ currentModelName }}->find()
+			->where([
+				'MONTH({{ currentModelName }}.created)' => date('11'),
+				'YEAR({{ currentModelName }}.created)' => date('Y',strtotime('-2 year'))
+			])->count());
+		$this->set('dec_2', $this->{{ currentModelName }}->find()
+			->where([
+				'MONTH({{ currentModelName }}.created)' => date('12'),
+				'YEAR({{ currentModelName }}.created)' => date('Y',strtotime('-2 year'))
+			])->count());
+		
+        $this->set(compact('{{ pluralName }}'));
+    }

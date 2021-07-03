@@ -1,0 +1,91 @@
+<div class="row">
+	<div class="col-md-4">
+	
+	</div>
+	<div class="col-md-8">
+	
+	</div>
+</div>
+=========================================================
+		<div class="card card-outline card-primary">
+		  <div class="card-header">
+			<h3 class="card-title">Title</h3>
+		  </div>
+		  <div class="card-body">
+			Content
+		  </div>
+		</div>
+=========================================================
+<div class="row">
+	<div class="col-md-6">
+	
+	</div>
+	<div class="col-md-6">
+	
+	</div>
+</div>
+
+=========================================================
+
+<div class="card">
+	<div class="header bg-blue">
+		<div class="panel_card_title">Menu</div>
+	</div>
+	<div class="body">
+
+	</div>
+</div>
+
+		<div class="card2">
+			<div class="header bg-blue">
+				<div class="panel_card2_title">Menu</div>
+				<div class="panel_card2_subtitle_wht">x</div>
+			</div>
+			<div class="body">
+
+			</div>
+		</div>
+
+
+		<div class="card2">
+			<div class="header">
+				<div class="panel_card2_title">Menu</div>
+				<div class="panel_card2_subtitle">x</div>
+			</div>
+			<div class="body">
+
+			</div>
+		</div>
+
+<?= $organization_name; ?>
+=========================================================
+
+<div class="row">
+  <div class="col">1</div>
+  <div class="col">2</div>
+  <div class="col">3</div>
+  <div class="col">4</div>
+  <div class="col">5</div>
+  <div class="col">6</div>
+  <div class="col">7</div>
+  <div class="col">8</div>
+  <div class="col">9</div>
+  <div class="col">10</div>
+  <div class="col">11</div>
+  <div class="col">12</div>
+</div>
+=============================================================
+<div class="btn-group">
+  <button type="button" class="btn btn-outline btn-sm btn-flat" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <i class="fas fa-bars text-primary"></i>
+  </button>
+  <div class="dropdown-menu dropdown-menu-right">
+		<?= $this->Html->link(__('<i class="fas fa-list"></i> List'), ['action' => 'index'], ['class' => 'dropdown-item', 'escape' => false]) ?>
+		{% set fields = Bake.filterFields(fields, schema, modelObject, indexColumns, ['binary', 'text']) %}
+			<?= $this->Html->link(__('<i class="fas fa-plus"></i> New {{ singularHumanName }}'), ['action' => 'add'], ['class' => 'dropdown-item', 'escape' => false]) ?>
+		{% set done = [] %}
+			<?= $this->Html->link(__('<i class="fas fa-list"></i> List'), ['action' => 'index'], ['class' => 'dropdown-item', 'escape' => false]) ?>
+	<div class="dropdown-divider"></div>
+		<?= $this->Html->link(__('<i class="fas fa-search"></i> Search'), ['action' => 'search'], ['class' => 'dropdown-item', 'escape' => false]) ?>
+  </div>
+</div>

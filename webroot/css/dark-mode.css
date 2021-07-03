@@ -1,0 +1,311 @@
+[data-theme="dark"] {
+  background-color: #343a40 !important;
+  color: #eee;
+}
+
+[data-theme="dark"] .bg-light {
+  background-color: #000000;
+}
+
+[data-theme="dark"] .bg-white {
+  background-color: #000 !important;
+}
+
+[data-theme="dark"] .bg-black {
+  background-color: #eee !important;
+}
+
+[data-theme="dark"] .header_details {
+    border-radius: 0px;
+    padding: 10px 10px 10px 10px;
+    border: none;
+    background: #343a40;
+    margin-bottom: 20px;
+	box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22) !important;
+}
+
+[data-theme="dark"] .header_details_intro {
+    font-family: 'Abel',sans-serif;
+    font-size: 25px;
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
+[data-theme="dark"] .header_details_intro_sub {
+    margin-left: 15px;
+    margin-right: 15px;
+    font-size: 15px;
+}
+
+[data-theme="dark"] .content-wrapper {
+  background: #343a40;
+}
+
+[data-theme="dark"] .main-footer {
+    background: #222;
+    border-top: 1px solid #dee2e6;
+    color: #869099;
+    padding: 1rem;
+}
+
+[data-theme="dark"] .card {
+  position: relative;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+  background-color: #343a40;
+  background-clip: border-box;
+  border: 0 solid rgba(0, 0, 0, 0.125);
+  /*border-radius: 0.25rem;*/
+}
+
+[data-theme="dark"] .card {
+    box-shadow: 0 0 1px rgba(255, 255, 255, 0.125), 0 1px 3px rgba(255, 255, 255, 0.2);
+    margin-bottom: 1rem;
+}
+
+[data-theme="dark"] .card-primary.card-outline {
+    border-top: 3px solid #007bff;
+}
+
+[data-theme="dark"] .card-header {
+    background-color: transparent;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.125);
+    padding: 0.75rem 1.25rem;
+    position: relative;
+    border-top-left-radius: 0.25rem;
+    border-top-right-radius: 0.25rem;
+}
+
+[data-theme="dark"] .navbar-white {
+    background-color: #343a40;
+}
+
+[data-theme="dark"] .navbar-light .navbar-nav .nav-link {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+[data-theme="dark"] .table-hover tbody tr:hover {
+  color: #ffffff;
+  background-color: rgba(0, 0, 0, 0.075);
+}
+
+[data-theme="dark"] blockquote {
+    background: #343a40;
+    border-left: 0.7rem solid #007bff;
+    margin: 1.5em .7rem;
+    padding: 0.5em .7rem;
+}
+
+[data-theme="dark"] .reference_menu {
+    text-decoration:none #ffffff;
+    margin-bottom: 0rem;
+}
+
+[data-theme="dark"] a.reference:link {
+    color:#ffffff;
+    text-decoration:none;
+}
+[data-theme="dark"] a.reference:visited {
+    color: #ffffff;
+    text-decoration:none;
+}
+[data-theme="dark"] a.reference:hover {
+    color: #ffffff;
+    text-decoration:underline;
+}
+[data-theme="dark"] a.reference:active {
+    color: #ffffff;
+    text-decoration:none;
+}
+
+/* Card 2 type ======================================== */
+[data-theme="dark"] .card2 {
+  background: #393e42;
+  min-height: 50px;
+  box-shadow: 0 2px 10px rgba(255, 255, 255, 0.125), 0 1px 3px rgba(255, 255, 255, 0.2);
+  position: relative;
+  margin-bottom: 30px; }
+[data-theme="dark"] .card2 .card2-inside-title {
+    margin-top: 25px;
+    margin-bottom: 15px;
+    display: block;
+    font-size: 15px;
+    color: #000; }
+[data-theme="dark"] .card2 .card2-inside-title small {
+      color: #999;
+      display: block;
+      font-size: 11px;
+      margin-top: 5px; }
+[data-theme="dark"] .card2 .card2-inside-title small a {
+        color: #777;
+        font-weight: bold; }
+[data-theme="dark"] .card2 .card2-inside-title:first-child {
+    margin-top: 0; }
+  .card2 .bg-red,
+  .card2 .bg-pink,
+  .card2 .bg-purple,
+  .card2 .bg-deep-purple,
+  .card2 .bg-indigo,
+  .card2 .bg-blue,
+  .card2 .bg-light-blue,
+  .card2 .bg-cyan,
+  .card2 .bg-teal,
+  .card2 .bg-green,
+  .card2 .bg-light-green,
+  .card2 .bg-lime,
+  .card2 .bg-yellow,
+  .card2 .bg-amber,
+  .card2 .bg-orange,
+  .card2 .bg-deep-orange,
+  .card2 .bg-brown,
+  .card2 .bg-grey,
+  .card2 .bg-blue-grey,
+  .card2 .bg-black {
+    border-bottom: none !important;
+    color: #fff !important; }
+    .card2 .bg-red h2, .card2 .bg-red small, .card2 .bg-red .material-icons,
+    .card2 .bg-pink h2,
+    .card2 .bg-pink small,
+    .card2 .bg-pink .material-icons,
+    .card2 .bg-purple h2,
+    .card2 .bg-purple small,
+    .card2 .bg-purple .material-icons,
+    .card2 .bg-deep-purple h2,
+    .card2 .bg-deep-purple small,
+    .card2 .bg-deep-purple .material-icons,
+    .card2 .bg-indigo h2,
+    .card2 .bg-indigo small,
+    .card2 .bg-indigo .material-icons,
+    .card2 .bg-blue h2,
+    .card2 .bg-blue small,
+    .card2 .bg-blue .material-icons,
+    .card2 .bg-light-blue h2,
+    .card2 .bg-light-blue small,
+    .card2 .bg-light-blue .material-icons,
+    .card2 .bg-cyan h2,
+    .card2 .bg-cyan small,
+    .card2 .bg-cyan .material-icons,
+    .card2 .bg-teal h2,
+    .card2 .bg-teal small,
+    .card2 .bg-teal .material-icons,
+    .card2 .bg-green h2,
+    .card2 .bg-green small,
+    .card2 .bg-green .material-icons,
+    .card2 .bg-light-green h2,
+    .card2 .bg-light-green small,
+    .card2 .bg-light-green .material-icons,
+    .card2 .bg-lime h2,
+    .card2 .bg-lime small,
+    .card2 .bg-lime .material-icons,
+    .card2 .bg-yellow h2,
+    .card2 .bg-yellow small,
+    .card2 .bg-yellow .material-icons,
+    .card2 .bg-amber h2,
+    .card2 .bg-amber small,
+    .card2 .bg-amber .material-icons,
+    .card2 .bg-orange h2,
+    .card2 .bg-orange small,
+    .card2 .bg-orange .material-icons,
+    .card2 .bg-deep-orange h2,
+    .card2 .bg-deep-orange small,
+    .card2 .bg-deep-orange .material-icons,
+    .card2 .bg-brown h2,
+    .card2 .bg-brown small,
+    .card2 .bg-brown .material-icons,
+    .card2 .bg-grey h2,
+    .card2 .bg-grey small,
+    .card2 .bg-grey .material-icons,
+    .card2 .bg-blue-grey h2,
+    .card2 .bg-blue-grey small,
+    .card2 .bg-blue-grey .material-icons,
+    .card2 .bg-black h2,
+    .card2 .bg-black small,
+    .card2 .bg-black .material-icons {
+      color: #fff !important; }
+    .card2 .bg-red .badge,
+    .card2 .bg-pink .badge,
+    .card2 .bg-purple .badge,
+    .card2 .bg-deep-purple .badge,
+    .card2 .bg-indigo .badge,
+    .card2 .bg-blue .badge,
+    .card2 .bg-light-blue .badge,
+    .card2 .bg-cyan .badge,
+    .card2 .bg-teal .badge,
+    .card2 .bg-green .badge,
+    .card2 .bg-light-green .badge,
+    .card2 .bg-lime .badge,
+    .card2 .bg-yellow .badge,
+    .card2 .bg-amber .badge,
+    .card2 .bg-orange .badge,
+    .card2 .bg-deep-orange .badge,
+    .card2 .bg-brown .badge,
+    .card2 .bg-grey .badge,
+    .card2 .bg-blue-grey .badge,
+    .card2 .bg-black .badge {
+      background-color: #fff;
+      color: #555; }
+[data-theme="dark"] .card2 .header {
+    color: #555;
+    padding: 20px 20px 20px 20px;
+    position: relative;
+    border-bottom: 1px solid rgba(204, 204, 204, 0.35); }
+[data-theme="dark"] .card2 .header .header-dropdown {
+      position: absolute;
+      top: 20px;
+      right: 15px;
+      list-style: none; }
+[data-theme="dark"] .card2 .header .header-dropdown .dropdown-menu li {
+        display: block !important; }
+[data-theme="dark"] .card2 .header .header-dropdown li {
+        display: inline-block; }
+[data-theme="dark"] .card2 .header .header-dropdown i {
+        font-size: 20px;
+        color: #999;
+        -moz-transition: all 0.5s;
+        -o-transition: all 0.5s;
+        -webkit-transition: all 0.5s;
+        transition: all 0.5s; }
+[data-theme="dark"] .card2 .header .header-dropdown i:hover {
+          color: #000; }
+[data-theme="dark"] .card2 .header h2 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: normal;
+      color: #111; }
+[data-theme="dark"] .card2 .header h2 small {
+        display: block;
+        font-size: 12px;
+        margin-top: 5px;
+        color: #999;
+        line-height: 15px; }
+[data-theme="dark"] .card2 .header h2 small a {
+          font-weight: bold;
+          color: #777; }
+[data-theme="dark"] .card2 .header .col-xs-12 h2 {
+      margin-top: 5px; }
+[data-theme="dark"] .card2 .body {
+    padding: 20px; }
+
+[data-theme="dark"] .panel_card2_title {
+  font-family: 'Abel', sans-serif;
+  font-size: 18px;
+  text-transform: uppercase;
+  font-weight: bold;
+  color: #fff;
+}
+
+[data-theme="dark"] .panel_card2_subtitle {
+  font-family: 'Abel', sans-serif;
+  font-size: 15px;
+  color: #fff;
+}
+
+[data-theme="dark"] .panel_card2_subtitle_wht {
+  font-family: 'Abel', sans-serif;
+  font-size: 15px;
+  color: #FFFFFF;
+}

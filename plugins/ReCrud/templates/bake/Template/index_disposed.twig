@@ -1,0 +1,135 @@
+{#
+/**
+ * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
+ * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
+ *
+ * Licensed under The MIT License
+ * For full copyright and license information, please see the LICENSE.txt
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @link          http://cakephp.org CakePHP(tm) Project
+ * @since         2.0.0
+ * @license       http://www.opensource.org/licenses/mit-license.php MIT License
+ */
+#}
+<?php
+/**
+ * @var \{{ namespace }}\View\AppView $this
+ * @var \{{ entityClass }}[]|\Cake\Collection\CollectionInterface ${{ pluralVar }}
+ */
+?>
+<div class="horizontal_menu">
+<div class="btn-group">
+  <button type="button" class="btn btn-outline btn-sm btn-flat" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <i class="fas fa-bars text-primary"></i>
+  </button>
+  <div class="dropdown-menu dropdown-menu-right">
+	{% set fields = Bake.filterFields(fields, schema, modelObject, indexColumns, ['binary', 'text']) %}
+		<?= $this->Html->link(__('<i class="fas fa-plus"></i> New {{ singularHumanName }}'), ['action' => 'add'], ['class' => 'dropdown-item', 'escape' => false]) ?>
+	{% set done = [] %}
+		<?= $this->Html->link(__('<i class="far fa-chart-bar"></i> Report'), ['action' => 'report'], ['class' => 'dropdown-item', 'escape' => false]) ?>
+	<div class="dropdown-divider"></div>
+		<?= $this->Html->link(__('<i class="far fa-clipboard"></i> Retention List'), ['action' => 'retention_list'], ['class' => 'dropdown-item', 'escape' => false]) ?>
+		<?= $this->Html->link(__('<i class="far fa-folder"></i> Archived'), ['action' => 'indexArchived'], ['class' => 'dropdown-item', 'escape' => false, 'target' => 'blank', 'title' => 'Archived List']) ?>
+	<div class="dropdown-divider"></div>
+		<?= $this->Html->link(__('<i class="fas fa-list"></i> List'), ['action' => 'index'], ['class' => 'dropdown-item', 'escape' => false]) ?>
+  </div>
+</div>
+</div>
+<div class="card2">
+	<div class="header">
+				<div class="panel_card2_title">{{ pluralHumanName }} Disposed List</div>
+				<div class="panel_card2_subtitle"><?= $organization_name; ?></div>
+	</div>
+		<div class="body">
+			<div class="col-md-12 table-responsive">
+				<table id="main_index" class="table table-hover text-nowrap">
+					<thead>
+				<tr>
+{% for field in fields %}
+					<th><?= $this->Paginator->sort('{{ field }}') ?></th>
+{% endfor %}
+					<th class="actions"><?= __('Actions') ?></th>
+				</tr>
+					</thead>
+            <tbody>
+                <?php foreach (${{ pluralVar }} as ${{ singularVar }}): ?>
+                <tr>
+{% for field in fields %}
+{% set isKey = false %}
+{% if associations.BelongsTo %}
+{% for alias, details in associations.BelongsTo %}
+{% if field == details.foreignKey %}
+{% set isKey = true %}
+                    <td><?= ${{ singularVar }}->has('{{ details.property }}') ? $this->Html->link(${{ singularVar }}->{{ details.property }}->{{ details.displayField }}, ['controller' => '{{ details.controller }}', 'action' => 'view', ${{ singularVar }}->{{ details.property }}->{{ details.primaryKey[0] }}]) : '' ?></td>
+{% endif %}
+{% endfor %}
+{% endif %}
+{% if isKey is not same as(true) %}
+{% set columnData = Bake.columnData(field, schema) %}
+{% if columnData.type not in ['integer', 'float', 'decimal', 'biginteger', 'smallinteger', 'tinyinteger'] %}
+                    <td><?= h(${{ singularVar }}->{{ field }}) ?></td>
+{% else %}
+                    <td><?= $this->Number->format(${{ singularVar }}->{{ field }}) ?></td>
+{% endif %}
+{% endif %}
+{% endfor %}
+{% set pk = '$' ~ singularVar ~ '->' ~ primaryKey[0] %}
+                    <td class="actions">
+						<?= $this->Form->postLink(__('<i class="far fa-trash-alt"></i> Delete'), ['action' => 'delete', {{ pk|raw }}], ['confirm' => __('Are you sure you want to delete # {0}?', {{ pk|raw }}), 'class' => 'btn btn-outline-danger btn-xs', 'escape' => false]) ?>
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+            </tbody>
+				</table>
+			</div>
+<?php if ($count_find_result != NULL): ?>
+<div class="row">
+	<div class="col-md-6">
+		<div class="row">
+			<div class="col-xs-3">
+<?php echo $this->Paginator->limitControl([10 => 'Show 10 entries',25 => 'Show 25 entries', 50 => 'Show 50 entries', 100 => 'Show 100 entries'], ${{ singularVar }}->perPage,['class' => 'form-control form-control-sm','label' => false]); ?>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-6 pull-right">
+		<span class="badge bg-primary">Total records: <?php echo $count_find_result; ?></span>
+	</div>
+</div>
+			
+			
+
+	<div>
+		<ul class="pagination justify-content-end">
+			<?= $this->Paginator->first(__('First')) ?>
+			<?= $this->Paginator->prev(__('Previous')) ?>
+			<?= $this->Paginator->numbers() ?>
+			<?= $this->Paginator->next(__('Next')) ?>
+			<?= $this->Paginator->last(__('Last')) ?>
+		</ul>
+		<p class="pagination justify-content-end"><?= $this->Paginator->counter(__('Page {{ '{{' }}page{{ '}}' }} of {{ '{{' }}pages{{ '}}' }}, showing {{ '{{' }}current{{ '}}' }} record(s) out of {{ '{{' }}count{{ '}}' }} total')) ?></p>
+	</div>
+<?php endif; ?>
+		</div>
+</div>
+
+<script>
+ function checkAll(ele) {
+     var checkboxes = document.getElementsByTagName('input');
+     if (ele.checked) {
+         for (var i = 0; i < checkboxes.length; i++) {
+             if (checkboxes[i].type == 'checkbox') {
+                 checkboxes[i].checked = true;
+             }
+         }
+     } else {
+         for (var i = 0; i < checkboxes.length; i++) {
+             console.log(i)
+             if (checkboxes[i].type == 'checkbox') {
+                 checkboxes[i].checked = false;
+             }
+         }
+     }
+ }
+</script>
