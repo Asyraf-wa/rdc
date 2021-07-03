@@ -32,7 +32,7 @@ class UsersController extends AppController
 	{
 		parent::initialize();
 		
-		$this->Authentication->addUnauthenticatedActions(['login','dashboard','invite','mysurvey','pin']);
+		$this->Authentication->addUnauthenticatedActions(['login','dashboard','mysurvey','pin']);
 
 		$this->loadComponent('Search.Search', [
 			'actions' => ['search'],
