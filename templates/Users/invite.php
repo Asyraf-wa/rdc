@@ -3,11 +3,11 @@
 	<div class="col-md-4">
 		<div class="card2">
 			<div class="header">
-				<div class="panel_card2_title">Menu</div>
+				<div class="panel_card2_title">Instruction</div>
 				<div class="panel_card2_subtitle"><?= $organization_name; ?></div>
 			</div>
 			<div class="body">
-
+Insert the selected respondent email. RDC will send the invitation email together with instruction and PIN.
 			</div>
 		</div>
 	</div>

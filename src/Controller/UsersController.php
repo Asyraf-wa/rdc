@@ -85,8 +85,26 @@ public function logout()
         if ($this->request->is('post')) {
             $user = $this->Users->patchEntity($user, $this->request->getData());
 			$user->pin = rand(1000,9999);
+			$receiver = $this->request->getData('email');
+			$pin = $user->pin;
+			
             if ($this->Users->save($user)) {
-                $this->Flash->success(__('The user has been saved.'));
+				$slug = $user->slug;
+//mailer
+				$mailer = new Mailer();
+				$mailer->setTransport('default'); //get email config
+				$mailer->setViewVars([
+					'pin' => $pin,
+					'slug' => $slug,
+					]);
+				$mailer->setFrom('noreply@codethepixel.com')
+					->setTo($receiver) //array formatted
+					->setEmailFormat('html')
+					->setSubject('Invitation to Re-CRUD Case Study')
+					->viewBuilder()
+						->setTemplate('invitation');
+				$mailer->deliver();
+                $this->Flash->success(__('The respondent has been invited.'));
 
                 return $this->redirect(['action' => 'index']);
             }
