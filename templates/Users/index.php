@@ -16,6 +16,8 @@
     <i class="fas fa-bars text-primary"></i>
   </button>
   <div class="dropdown-menu dropdown-menu-right">
+		<?= $this->Html->link(__('<i class="fas fa-plus"></i> Invite Respondent'), ['action' => 'invite'], ['class' => 'dropdown-item', 'escape' => false]) ?>
+		<div class="dropdown-divider"></div>
 			<?= $this->Html->link(__('<i class="fas fa-plus"></i> New User'), ['action' => 'add'], ['class' => 'dropdown-item', 'escape' => false]) ?>
 			<?= $this->Html->link(__('<i class="fas fa-search"></i> Search'), ['action' => 'search'], ['class' => 'dropdown-item', 'escape' => false]) ?>
 		<?= $this->Html->link(__('<i class="far fa-chart-bar"></i> Report'), ['action' => 'report'], ['class' => 'dropdown-item', 'escape' => false]) ?>
