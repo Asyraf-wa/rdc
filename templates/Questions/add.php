@@ -601,6 +601,8 @@
 				<div class="form-group">
 					<?php echo $this->Form->control('comment', ['class' => 'form-control','required' => false, 'id' => 'summernote']); ?>
 				</div>	
+				
+
 
             </fieldset>
 		  </div>

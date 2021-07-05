@@ -1,7 +1,6 @@
 <?php
 	echo $this->Html->css('select2/css/select2.css');
 	echo $this->Html->script('select2/js/select2.full.min.js');
-	echo $this->Html->script('ckeditor/ckeditor');
 	$c_name = $this->request->getParam('controller');
 ?>
 
@@ -284,13 +283,23 @@ if ($user->primary_language == NULL){
 			} ?>
 	</div>
 	
-
+<div>
+<br>
+<table>
+	<tr>
+		<td valign="top"><input type="checkbox" id="terms_and_conditions" value="1" />&nbsp;</td>
+		<td><label for="terms_and_conditions">I confirmed that I've read the instructions and voluntarily agreed to the terms and conditions as stated in the invitation email.</label></td>
+	</tr>
+</table>
+	
+	
+</div>
             </fieldset>
 
 			</div>
 				<div class="card-footer pull-right">
 				  <?= $this->Form->button('Reset', ['type' => 'reset', 'class' => 'btn btn-outline-primary btn-flat']) ?>
-				  <?= $this->Form->button(__('Submit'),['type' => 'submit', 'class' => 'btn btn-outline-primary btn-flat']) ?>
+				  <?= $this->Form->button(__('Submit'),['type' => 'submit', 'class' => 'btn btn-outline-primary btn-flat', 'id' => 'submit_button', 'disabled' => 'disabled']) ?>
 				  <?= $this->Form->end() ?>
                 </div>
 		</div>
@@ -576,3 +585,16 @@ echo $this->Number->precision($count_answered_sus, 0);
 		</div>
 	</div>
 </div>
+
+<script type="text/javascript">
+$('#terms_and_conditions').click(function(){
+    //If the checkbox is checked.
+    if($(this).is(':checked')){
+        //Enable the submit button.
+        $('#submit_button').attr("disabled", false);
+    } else{
+        //If it is not checked, disable the button.
+        $('#submit_button').attr("disabled", true);
+    }
+});
+</script>
