@@ -159,10 +159,14 @@ class SusController extends AppController
         $sus = $this->Sus->newEmptyEntity();
         if ($this->request->is('post')) {
             $sus = $this->Sus->patchEntity($sus, $this->request->getData());
+			
+			$session = $this->request->getSession(); //get session data: user slug
+			$sus->user_id = $session->read('user_id');
+			
             if ($this->Sus->save($sus)) {
                 $this->Flash->success(__('The sus has been saved.'));
 
-                $session = $this->request->getSession(); //get session data: user slug
+                //$session = $this->request->getSession(); //get session data: user slug
                 return $this->redirect(['controller' => 'users', 'action' => 'mysurvey', $session->read('slug')]);
             }
             $this->Flash->error(__('The sus could not be saved. Please, try again.'));
