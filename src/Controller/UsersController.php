@@ -210,10 +210,52 @@ public function logout()
     {
 		
 		$this->set('users', $this->paginate($this->Users->find('all')
-				->where(['Users.status' => 1]) //1 = Active
+				->where(['Users.role' => '0']) //1 = Active
 				//->order(['Users.created' => 'desc']) 
 		));	
 		$this->set('count_find_result', $this->Users->find()->where(['status' => '1'])->count());
+		
+		//$this->set('total', $this->Users->find()->count());
+		$this->set('total_invitation', $this->Users->find()->where(['role' => '0'])->count());
+		
+		$this->set('total_completed_response', $this->Users->find()
+			->where([
+				'role' => '0',
+				'fullname !=' => '',
+			])->count());
+		
+		$this->set('total_male', $this->Users->find()->where(['gender' => 'Male'])->count());
+		$this->set('total_female', $this->Users->find()->where(['gender' => 'Female'])->count());
+		
+		$this->set('total_age_21_25', $this->Users->find()->where(['age' => '21-25'])->count());
+		$this->set('total_age_26_30', $this->Users->find()->where(['age' => '26-30'])->count());
+		$this->set('total_age_31_35', $this->Users->find()->where(['age' => '31-35'])->count());
+		$this->set('total_age_36_40', $this->Users->find()->where(['age' => '36-40'])->count());
+		$this->set('total_age_41_45', $this->Users->find()->where(['age' => '41-45'])->count());
+		$this->set('total_age_46_50', $this->Users->find()->where(['age' => '46-50'])->count());
+		
+		$this->set('total_qualification_hs', $this->Users->find()->where(['highest_qualification' => 'High School'])->count());
+		$this->set('total_qualification_diploma', $this->Users->find()->where(['highest_qualification' => 'Diploma'])->count());
+		$this->set('total_qualification_degree', $this->Users->find()->where(['highest_qualification' => 'Bachelor Degree'])->count());
+		$this->set('total_qualification_master', $this->Users->find()->where(['highest_qualification' => 'Master Degree'])->count());
+		$this->set('total_qualification_phd', $this->Users->find()->where(['highest_qualification' => 'PhD'])->count());
+		
+		$this->set('total_exp_3', $this->Users->find()->where(['dev_experience' => '< 3 years'])->count());
+		$this->set('total_exp_36', $this->Users->find()->where(['dev_experience' => '3 - 6 years'])->count());
+		$this->set('total_exp_more', $this->Users->find()->where(['dev_experience' => '> 6 years'])->count());
+		
+		$this->set('total_sector_web', $this->Users->find()->where(['dev_sector' => 'Web'])->count());
+		$this->set('total_sector_mobile', $this->Users->find()->where(['dev_sector' => 'Mobile'])->count());
+		$this->set('total_sector_desktop', $this->Users->find()->where(['dev_sector' => 'Desktop'])->count());
+		$this->set('total_sector_cloud', $this->Users->find()->where(['dev_sector' => 'Cloud'])->count());
+		$this->set('total_sector_iot', $this->Users->find()->where(['dev_sector' => 'IoT'])->count());
+		
+		$this->set('total_language_php', $this->Users->find()->where(['primary_language' => 'PHP'])->count());
+		$this->set('total_language_java', $this->Users->find()->where(['primary_language' => 'Java'])->count());
+		$this->set('total_language_python', $this->Users->find()->where(['primary_language' => 'Python'])->count());
+		$this->set('total_language_c', $this->Users->find()->where(['primary_language' => 'C'])->count());
+		$this->set('total_language_cplus', $this->Users->find()->where(['primary_language' => 'C++'])->count());
+		$this->set('total_language_other', $this->Users->find()->where(['primary_language' => 'Other'])->count());
     }
 	
     public function dashboard()

@@ -37,14 +37,14 @@
 		<?php echo $this->Html->link('<i class="nav-icon fas fa-tachometer-alt" aria-hidden="true"></i> ' .__('<p>Respondent</p>'), ['controller' => 'Users', 'action' => 'index', 'prefix' => false], ['class' => 'nav-link', 'escape' => false]); ?>
 	</li>
 	<li class="nav-item <?= $c_name == 'Questions'?'bg-gray':'' ?>">
-		<?php echo $this->Html->link('<i class="nav-icon far fa-question-circle" aria-hidden="true"></i> ' .__('<p>Survey</p>'), ['controller' => 'questions', 'action' => 'index', 'prefix' => false], ['class' => 'nav-link', 'escape' => false]); ?>
+		<?php echo $this->Html->link('<i class="nav-icon fas fa-code" aria-hidden="true"></i> ' .__('<p>Feature Analysis</p>'), ['controller' => 'questions', 'action' => 'index', 'prefix' => false], ['class' => 'nav-link', 'escape' => false]); ?>
 	</li>	
 	<li class="nav-item <?= $c_name == 'Sus'?'bg-gray':'' ?>">
-		<?php echo $this->Html->link('<i class="nav-icon far fa-question-circle" aria-hidden="true"></i> ' .__('<p>Usability</p>'), ['controller' => 'sus', 'action' => 'index', 'prefix' => false], ['class' => 'nav-link', 'escape' => false]); ?>
+		<?php echo $this->Html->link('<i class="nav-icon fas fa-brain" aria-hidden="true"></i> ' .__('<p>Usability (SUS)</p>'), ['controller' => 'sus', 'action' => 'index', 'prefix' => false], ['class' => 'nav-link', 'escape' => false]); ?>
 	</li>
 	
 	<li class="nav-item">
-		<?php echo $this->Html->link('<i class="nav-icon fas fa-tachometer-alt" aria-hidden="true"></i> ' .__('<p>Logout</p>'), ['controller' => 'Users', 'action' => 'logout', 'prefix' => false], ['class' => 'nav-link', 'escape' => false]); ?>
+		<?php echo $this->Html->link('<i class="nav-icon fas fa-sign-out-alt" aria-hidden="true"></i> ' .__('<p>Logout</p>'), ['controller' => 'Users', 'action' => 'logout', 'prefix' => false], ['class' => 'nav-link', 'escape' => false]); ?>
 	</li>
 <?php } ?>	
         </ul>
