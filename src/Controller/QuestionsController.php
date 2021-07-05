@@ -229,10 +229,12 @@ class QuestionsController extends AppController
         $question = $this->Questions->newEmptyEntity();
         if ($this->request->is('post')) {
             $question = $this->Questions->patchEntity($question, $this->request->getData());
+			 $session = $this->request->getSession(); //get session data: user slug
+			 $question->user_id = $session->read('user_id');
             if ($this->Questions->save($question)) {
                 $this->Flash->success(__('The question has been saved.'));
 
-                $session = $this->request->getSession(); //get session data: user slug
+               
                 return $this->redirect(['controller' => 'users', 'action' => 'mysurvey', $session->read('slug')]);
             }
             $this->Flash->error(__('The question could not be saved. Please, try again.'));

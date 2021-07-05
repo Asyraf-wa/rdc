@@ -128,6 +128,7 @@ public function logout()
 				$session = $this->getRequest()->getSession(); //get session
 				$session->write('pin2', $this->request->getData('pin2')); //write pin value to session
 				$session->write('slug', $user->slug); //write pin value to session
+				$session->write('user_id', $user->id); //write user_id value to session
 				return $this->redirect(['action' => 'mysurvey', $user->slug]);
 			}
 			$this->Flash->error(__('Wrong Pin code. Please try again.'));
