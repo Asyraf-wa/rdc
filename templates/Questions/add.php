@@ -7,7 +7,8 @@
 <?php
 	echo $this->Html->css('select2/css/select2.css');
 	echo $this->Html->script('select2/js/select2.full.min.js');
-	echo $this->Html->script('ckeditor/ckeditor');
+	echo $this->Html->css('https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css');
+	echo $this->Html->script('https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js');
 	$c_name = $this->request->getParam('controller');
 ?>
 
@@ -597,6 +598,10 @@
 <!--SF12 End-->
 </table>		
 
+				<div class="form-group">
+					<?php echo $this->Form->control('comment', ['class' => 'form-control','required' => false, 'id' => 'summernote']); ?>
+				</div>	
+
             </fieldset>
 		  </div>
 				<div class="card-footer pull-right">
@@ -606,8 +611,16 @@
                 </div>
 		</div>
 		
-
-
+<script>
+$(document).ready(function() {
+	$('#summernote').summernote({
+		placeholder: 'Insert your email content here',
+        //tabsize: 10,
+        height: 300
+		
+	});
+});
+</script>
 <script type="text/javascript">
 $(document).ready(function() {
   $(".input select").select2();

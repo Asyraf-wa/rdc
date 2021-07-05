@@ -78,6 +78,7 @@ class Question extends Entity
         'sf12_s' => 1,
         'sf12_l' => 1,
         'status' => 1,
+        'comment' => 1,
         'created' => 1,
         'modified' => 1,
         'user' => 1,
