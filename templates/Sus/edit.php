@@ -121,7 +121,7 @@
 	</tr>
 	<tr>
 		<td class="text-center">3</td>
-		<td>I would not need to supplement Re-CRUD with anadditional one.</td>
+		<td>I would not need to supplement Re-CRUD with an additional one.</td>
 		<td class="text-center">
 			<div class="radio-toolbar2">
 				<?php echo $this->Form->radio(
@@ -165,7 +165,7 @@
 	</tr>
 	<tr>
 		<td class="text-center">5</td>
-		<td>This system’s capabilities would meet myrequirements.</td>
+		<td>This system’s capabilities would meet my requirements.</td>
 		<td class="text-center">
 			<div class="radio-toolbar2">
 				<?php echo $this->Form->radio(

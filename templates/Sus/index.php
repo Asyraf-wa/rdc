@@ -655,7 +655,7 @@ echo $this->Number->precision($score_q4, 0) . '%'; ?>
 <!--q5-->
 			<tr class="text-center">
 				<td>5</td>
-				<td class="text-left">This system’s capabilities would meet myrequirements<br>
+				<td class="text-left">This system’s capabilities would meet my requirements<br>
 					<div class="row">
 					  <div class="col">
 						<div class="collapse multi-collapse" id="chart5">
