@@ -573,12 +573,12 @@
 <div class="row">
           <div class="col-12 col-sm-6 col-md-3">
             <div class="info-box">
-              <span class="info-box-icon bg-info elevation-1"><i class="far fa-thumbs-up"></i></span>
+              <span class="info-box-icon bg-info elevation-1"><i class="fas fa-info-circle"></i></span>
 
               <div class="info-box-content">
-                <span class="info-box-text">Total Completed Response</span>
+                <span class="info-box-text">Total Invitation Sent</span>
                 <span class="info-box-number">
-                  <?php echo $total; ?>
+                  <?php echo $total_respondent; ?>
                   <small></small>
                 </span>
               </div>
@@ -589,14 +589,12 @@
           <!-- /.col -->
           <div class="col-12 col-sm-6 col-md-3">
             <div class="info-box mb-3">
-              <span class="info-box-icon bg-danger elevation-1"><i class="far fa-thumbs-down"></i></span>
+              <span class="info-box-icon bg-success elevation-1"><i class="fas fa-check"></i></span>
 
               <div class="info-box-content">
-                <span class="info-box-text">Total Incomplete Response</span>
+                <span class="info-box-text">Total Completed Feature Analysis</span>
                 <span class="info-box-number">
-<?php $baki = 7 - $total;
-echo $baki;
-?>
+<?php echo $total; ?>
 				</span>
               </div>
               <!-- /.info-box-content -->
@@ -610,11 +608,16 @@ echo $baki;
 
           <div class="col-12 col-sm-6 col-md-3">
             <div class="info-box mb-3">
-              <span class="info-box-icon bg-success elevation-1"><i class="fas fa-list-alt"></i></span>
+              <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-spinner"></i></span>
 
               <div class="info-box-content">
-                <span class="info-box-text">Total Completed Log Received</span>
-                <span class="info-box-number"><?php echo $total; ?></span>
+                <span class="info-box-text">Total Pending for Response</span>
+                <span class="info-box-number">
+				<?php 
+					$pending_answer = $total_respondent - $total;
+					echo $pending_answer;
+				?>
+				</span>
               </div>
               <!-- /.info-box-content -->
             </div>
@@ -626,7 +629,7 @@ echo $baki;
               <span class="info-box-icon bg-warning elevation-1"><i class="far fa-list-alt"></i></span>
 
               <div class="info-box-content">
-                <span class="info-box-text">Total Incomplete Log Received</span>
+                <span class="info-box-text">Log</span>
                 <span class="info-box-number">0</span>
               </div>
               <!-- /.info-box-content -->
@@ -636,7 +639,7 @@ echo $baki;
           <!-- /.col -->
         </div>	
 	
-
+	
 
 <div class="row">
 	<div class="col-md-6">

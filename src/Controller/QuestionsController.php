@@ -36,6 +36,8 @@ class QuestionsController extends AppController
         $this->paginate = [
             'contain' => ['Users'],
         ];
+		$this->loadModel('Users');
+		$total_respondent = $this->Users->find()->where(['Users.role' => '0'])->count();
 		
 		$this->set('questions', $this->paginate($this->Questions->find('all')
 				->where(['Questions.status' => 1]) //1 = Active
@@ -165,7 +167,7 @@ class QuestionsController extends AppController
 		$this->set('sf12_l_hd', $this->Questions->find()->where(['sf12_l' => 'HD',])->count()); 
 		$this->set('sf12_l_m', $this->Questions->find()->where(['sf12_l' => 'M',])->count()); 
 
-
+		$this->set(compact('total_respondent'));
 
 
 

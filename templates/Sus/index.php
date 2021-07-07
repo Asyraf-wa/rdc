@@ -45,7 +45,7 @@
 				<tr class="text-center">
 					<th><?= $this->Form->checkbox('check[]',['onchange'=>'checkAll(this)', 'name'=>'chk[]']) ?></th>
 					<th><?= $this->Paginator->sort('id') ?></th>
-					<th><?= $this->Paginator->sort('user_id','Respondent') ?></th>
+					<th style="text-align: left;"><?= $this->Paginator->sort('user_id','Respondent') ?></th>
 					<th><?= $this->Paginator->sort('q1') ?></th>
 					<th><?= $this->Paginator->sort('q2') ?></th>
 					<th><?= $this->Paginator->sort('q3') ?></th>
@@ -64,7 +64,7 @@
                 <tr class="text-center">
 					<td><?php echo $this->Form->checkbox('check[]',['value'=>$sus->id]) ?></td>
                     <td><?= $this->Number->format($sus->id) ?></td>
-                    <td><?= $sus->has('user') ? $this->Html->link($sus->user->id, ['controller' => 'Users', 'action' => 'view', $sus->user->id]) : '' ?></td>
+                    <td style="text-align: left;"><?= $sus->has('user') ? $this->Html->link($sus->user->fullname, ['controller' => 'Users', 'action' => 'view', $sus->user->id]) : '' ?></td>
                     <td><?= $this->Number->format($sus->q1) ?></td>
                     <td><?= $this->Number->format($sus->q2) ?></td>
                     <td><?= $this->Number->format($sus->q3) ?></td>
@@ -190,6 +190,88 @@
 <div class="horizontal_menu">
   <button class="btn btn-outline-primary btn-sm align-right" type="button" data-toggle="collapse" data-target=".multi-collapse" aria-expanded="false" aria-controls="multiCollapseExample1 multiCollapseExample2">Toggle all charts</button>
 </div>	
+
+<div class="row">
+          <div class="col-12 col-sm-6 col-md-3">
+            <div class="info-box">
+              <span class="info-box-icon bg-info elevation-1"><i class="fas fa-info-circle"></i></span>
+
+              <div class="info-box-content">
+                <span class="info-box-text">Total Invitation Sent</span>
+                <span class="info-box-number">
+                  <?php echo $total_respondent; ?>
+                  <small></small>
+                </span>
+              </div>
+              <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+          </div>
+          <!-- /.col -->
+          <div class="col-12 col-sm-6 col-md-3">
+            <div class="info-box mb-3">
+              <span class="info-box-icon bg-success elevation-1"><i class="fas fa-check"></i></span>
+
+              <div class="info-box-content">
+                <span class="info-box-text">Total Completed SUS Response</span>
+                <span class="info-box-number">
+<?php echo $total; ?>
+				</span>
+              </div>
+              <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+          </div>
+          <!-- /.col -->
+
+          <!-- fix for small devices only -->
+          <div class="clearfix hidden-md-up"></div>
+
+          <div class="col-12 col-sm-6 col-md-3">
+            <div class="info-box mb-3">
+              <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-spinner"></i></span>
+
+              <div class="info-box-content">
+                <span class="info-box-text">Total Pending for Response</span>
+                <span class="info-box-number">
+				<?php 
+					$pending_answer = $total_respondent - $total;
+					echo $pending_answer;
+				?>
+				</span>
+              </div>
+              <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+          </div>
+          <!-- /.col -->
+          <div class="col-12 col-sm-6 col-md-3">
+            <div class="info-box mb-3">
+              <span class="info-box-icon bg-warning elevation-1"><i class="far fa-list-alt"></i></span>
+
+              <div class="info-box-content">
+                <span class="info-box-text">Log</span>
+                <span class="info-box-number">0</span>
+              </div>
+              <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+          </div>
+          <!-- /.col -->
+        </div>	
+
+<div class="row">
+	<div class="col-md-6 text-center">
+	<div class="panel_card2_title text-primary">SUS Score Formula</div>
+<?= $this->Html->image('sus_formula.jpg', ['alt' => 'SUS Formula', 'width' => '500px', 'height' => '86px']); ?>
+	</div>
+	<div class="col-md-6 text-center">
+	<div class="panel_card2_title text-primary">SUS Score Scale</div>
+<?= $this->Html->image('sus_scale.jpg', ['alt' => 'SUS Formula', 'width' => '500px', 'height' => '150px']); ?>
+	</div>
+</div>
+
+
 	
 		<table class="table table-hover table-bordered">
 			<tr class="text-center bg-gray">
@@ -197,6 +279,7 @@
 				<td width="50px">#</td>
 				<td>Questions</td>
 				<td>Chart</td>
+				<td class="bg-teal">SUS<br>Score</td>
 				<td>1</td>
 				<td>2</td>
 				<td>3</td>
@@ -275,6 +358,10 @@ var q1 = new Chart(ctx, {
 				</td>
 				<td>
 				<button class="btn btn-block btn-outline-primary btn-sm" type="button" data-toggle="collapse" data-target="#chart1" aria-expanded="false" aria-controls="chart1"><i class="fas fa-chart-bar"></i></button>
+				</td>
+				<td class="bg-teal">
+<?php $score_q1 = (($q1_1*1)+($q1_2*2)+($q1_3*3)+($q1_4*4)+($q1_5*5))/($total*5)*100;
+echo $this->Number->precision($score_q1, 0) . '%'; ?>
 				</td>
 				<td><?php echo $q1_1; ?><br>
 				(<?php $q1_1_percentage = $q1_1/$total*100;
@@ -363,6 +450,10 @@ var q2 = new Chart(ctx, {
 				<td>
 				<button class="btn btn-block btn-outline-primary btn-sm" type="button" data-toggle="collapse" data-target="#chart2" aria-expanded="false" aria-controls="chart2"><i class="fas fa-chart-bar"></i></button>
 				</td>
+				<td class="bg-teal">
+<?php $score_q2 = (($q2_1*1)+($q2_2*2)+($q2_3*3)+($q2_4*4)+($q2_5*5))/($total*5)*100;
+echo $this->Number->precision($score_q2, 0) . '%'; ?>				
+				</td>
 				<td><?php echo $q2_1; ?><br>
 				(<?php $q2_1_percentage = $q2_1/$total*100;
 				echo $this->Number->precision($q2_1_percentage, 0); ?>%)</td>
@@ -449,6 +540,10 @@ var q3 = new Chart(ctx, {
 					</div></td>
 				<td>
 				<button class="btn btn-block btn-outline-primary btn-sm" type="button" data-toggle="collapse" data-target="#chart3" aria-expanded="false" aria-controls="chart3"><i class="fas fa-chart-bar"></i></button>
+				</td>
+				<td class="bg-teal">
+<?php $score_q3 = (($q3_1*1)+($q3_2*2)+($q3_3*3)+($q3_4*4)+($q3_5*5))/($total*5)*100;
+echo $this->Number->precision($score_q3, 0) . '%'; ?>					
 				</td>
 				<td><?php echo $q3_1; ?><br>
 				(<?php $q3_1_percentage = $q3_1/$total*100;
@@ -537,6 +632,10 @@ var q4 = new Chart(ctx, {
 				<td>
 				<button class="btn btn-block btn-outline-primary btn-sm" type="button" data-toggle="collapse" data-target="#chart4" aria-expanded="false" aria-controls="chart4"><i class="fas fa-chart-bar"></i></button>
 				</td>
+				<td class="bg-teal">
+<?php $score_q4 = (($q4_1*1)+($q4_2*2)+($q4_3*3)+($q4_4*4)+($q4_5*5))/($total*5)*100;
+echo $this->Number->precision($score_q4, 0) . '%'; ?>	
+				</td>
 				<td><?php echo $q4_1; ?><br>
 				(<?php $q4_1_percentage = $q4_1/$total*100;
 				echo $this->Number->precision($q4_1_percentage, 0); ?>%)</td>
@@ -623,6 +722,10 @@ var q5 = new Chart(ctx, {
 					</div></td>
 				<td>
 				<button class="btn btn-block btn-outline-primary btn-sm" type="button" data-toggle="collapse" data-target="#chart5" aria-expanded="false" aria-controls="chart5"><i class="fas fa-chart-bar"></i></button>
+				</td>
+				<td class="bg-teal">
+<?php $score_q5 = (($q5_1*1)+($q5_2*2)+($q5_3*3)+($q5_4*4)+($q5_5*5))/($total*5)*100;
+echo $this->Number->precision($score_q5, 0) . '%'; ?>	
 				</td>
 				<td><?php echo $q5_1; ?><br>
 				(<?php $q5_1_percentage = $q5_1/$total*100;
@@ -712,6 +815,10 @@ var q6 = new Chart(ctx, {
 				<td>
 				<button class="btn btn-block btn-outline-primary btn-sm" type="button" data-toggle="collapse" data-target="#chart6" aria-expanded="false" aria-controls="chart6"><i class="fas fa-chart-bar"></i></button>
 				</td>
+				<td class="bg-teal">
+<?php $score_q6 = (($q6_1*1)+($q6_2*2)+($q6_3*3)+($q6_4*4)+($q6_5*5))/($total*5)*100;
+echo $this->Number->precision($score_q6, 0) . '%'; ?>	
+				</td>
 				<td><?php echo $q6_1; ?><br>
 				(<?php $q6_1_percentage = $q6_1/$total*100;
 				echo $this->Number->precision($q6_1_percentage, 0); ?>%)</td>
@@ -798,6 +905,10 @@ var q7 = new Chart(ctx, {
 					</div></td>
 				<td>
 				<button class="btn btn-block btn-outline-primary btn-sm" type="button" data-toggle="collapse" data-target="#chart7" aria-expanded="false" aria-controls="chart7"><i class="fas fa-chart-bar"></i></button>
+				</td>
+				<td class="bg-teal">
+<?php $score_q7 = (($q7_1*1)+($q7_2*2)+($q7_3*3)+($q7_4*4)+($q7_5*5))/($total*5)*100;
+echo $this->Number->precision($score_q7, 0) . '%'; ?>	
 				</td>
 				<td><?php echo $q7_1; ?><br>
 				(<?php $q7_1_percentage = $q7_1/$total*100;
@@ -886,6 +997,10 @@ var q8 = new Chart(ctx, {
 				<td>
 				<button class="btn btn-block btn-outline-primary btn-sm" type="button" data-toggle="collapse" data-target="#chart8" aria-expanded="false" aria-controls="chart8"><i class="fas fa-chart-bar"></i></button>
 				</td>
+				<td class="bg-teal">
+<?php $score_q8 = (($q8_1*1)+($q8_2*2)+($q8_3*3)+($q8_4*4)+($q8_5*5))/($total*5)*100;
+echo $this->Number->precision($score_q8, 0) . '%'; ?>	
+				</td>
 				<td><?php echo $q8_1; ?><br>
 				(<?php $q8_1_percentage = $q8_1/$total*100;
 				echo $this->Number->precision($q8_1_percentage, 0); ?>%)</td>
@@ -972,6 +1087,10 @@ var q9 = new Chart(ctx, {
 					</div></td>
 				<td>
 				<button class="btn btn-block btn-outline-primary btn-sm" type="button" data-toggle="collapse" data-target="#chart9" aria-expanded="false" aria-controls="chart9"><i class="fas fa-chart-bar"></i></button>
+				</td>
+				<td class="bg-teal">
+<?php $score_q9 = (($q9_1*1)+($q9_2*2)+($q9_3*3)+($q9_4*4)+($q9_5*5))/($total*5)*100;
+echo $this->Number->precision($score_q9, 0) . '%'; ?>	
 				</td>
 				<td><?php echo $q9_1; ?><br>
 				(<?php $q9_1_percentage = $q9_1/$total*100;
@@ -1060,6 +1179,10 @@ var q10 = new Chart(ctx, {
 				<td>
 				<button class="btn btn-block btn-outline-primary btn-sm" type="button" data-toggle="collapse" data-target="#chart10" aria-expanded="false" aria-controls="chart10"><i class="fas fa-chart-bar"></i></button>
 				</td>
+				<td class="bg-teal">
+<?php $score_q10 = (($q10_1*1)+($q10_2*2)+($q10_3*3)+($q10_4*4)+($q10_5*5))/($total*5)*100;
+echo $this->Number->precision($score_q10, 0) . '%'; ?>	
+				</td>
 				<td><?php echo $q10_1; ?><br>
 				(<?php $q10_1_percentage = $q10_1/$total*100;
 				echo $this->Number->precision($q10_1_percentage, 0); ?>%)</td>
@@ -1080,43 +1203,82 @@ var q10 = new Chart(ctx, {
 	</div>
 </div>
 
-<div class="card2">
-	<div class="header">
-		<div class="panel_card2_title">Analysis</div>
-		<div class="panel_card2_subtitle"><?= $organization_name; ?></div>
-	</div>
-	<div class="body">
-<div class="row">
-	<div class="col-md-4">
-	x
-	</div>
-	<div class="col-md-4">
-	x
-	</div>
-	<div class="col-md-4">
-	x
-	</div>
-</div>
-	</div>
-</div>
 
+		<div class="card2">
+			<div class="header">
+				<div class="panel_card2_title">SUS Score</div>
+				<div class="panel_card2_subtitle"><?= $organization_name; ?></div>
+			</div>
+			<div class="body">
+<canvas id="q1_sus" width="500px" height="200px"></canvas>
+<script>
+var ctx = document.getElementById('q1_sus').getContext('2d');
+var q1_sus = new Chart(ctx, {
+    type: 'horizontalBar',
+    data: {
+        labels: ['Q1','Q2','Q3','Q4','Q5','Q6','Q7','Q8','Q9','Q10'],
+        datasets: [{
+            label: '#',
+            data: [<?= json_encode($this->Number->precision($score_q1, 0)); ?>,<?= json_encode($this->Number->precision($score_q2, 0)); ?>,<?= json_encode($this->Number->precision($score_q3, 0)); ?>,<?= json_encode($this->Number->precision($score_q4, 0)); ?>,<?= json_encode($this->Number->precision($score_q5, 0)); ?>,<?= json_encode($this->Number->precision($score_q6, 0)); ?>,<?= json_encode($this->Number->precision($score_q7, 0)); ?>,<?= json_encode($this->Number->precision($score_q8, 0)); ?>,<?= json_encode($this->Number->precision($score_q9, 0)); ?>,<?= json_encode($this->Number->precision($score_q10, 0)); ?>],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(89, 233, 28, 0.2)',
+				'rgba(255, 5, 5, 0.2)',
+                'rgba(255, 128, 0, 0.2)',
+                'rgba(153, 153, 153, 0.2)',
+                'rgba(15, 207, 210, 0.2)',
+                'rgba(44, 13, 181, 0.2)',
+                'rgba(86, 172, 12, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(89, 233, 28, 1)',
+				'rgba(255, 5, 5, 1)',
+                'rgba(255, 128, 0, 1)',
+                'rgba(153, 153, 153, 1)',
+                'rgba(15, 207, 210, 1)',
+                'rgba(44, 13, 181, 1)',
+                'rgba(86, 172, 12, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+		responsive: true,
+		title: {
+			display: false,
+			text: ''
+		},
+	legend: {
+		display: false,
+		position: 'top',
+			labels: {
+			  boxWidth: 40,
+			  fontColor: 'black'
+			}
+	},
+        scales: {
+            xAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
+        }
+    }
+});
+</script>
+<?= $this->Html->image('scale.jpg', ['alt' => 'SUS Scale', 'width' => '100%', 'height' => '']); ?>
+			</div>
+		</div>
 
-<div class="container">
-<div class="row">
-	<div class="col-md-4">
-	x
-	</div>
-	<div class="col-md-4">
-	x
-	</div>
-	<div class="col-md-4">
-	x
-	</div>
-	<div class="col-md-4">
-	x
-	</div>
-</div>
-</div>
 
 
 

@@ -36,6 +36,8 @@ class SusController extends AppController
         $this->paginate = [
             'contain' => ['Users'],
         ];
+		$this->loadModel('Users');
+		$total_respondent = $this->Users->find()->where(['Users.role' => '0'])->count();
 		
 		$this->set('sus', $this->paginate($this->Sus->find('all')
 				->where(['Sus.status' => 1]) //1 = Active
@@ -52,6 +54,7 @@ class SusController extends AppController
 		$this->set('q1_3', $this->Sus->find()->where(['q1' => '3'])->count());
 		$this->set('q1_4', $this->Sus->find()->where(['q1' => '4'])->count());
 		$this->set('q1_5', $this->Sus->find()->where(['q1' => '5'])->count());
+		
 //q2
 		$this->set('q2_1', $this->Sus->find()->where(['q2' => '1'])->count());
 		$this->set('q2_2', $this->Sus->find()->where(['q2' => '2'])->count());
@@ -106,6 +109,11 @@ class SusController extends AppController
 		$this->set('q10_3', $this->Sus->find()->where(['q10' => '3'])->count());
 		$this->set('q10_4', $this->Sus->find()->where(['q10' => '4'])->count());
 		$this->set('q10_5', $this->Sus->find()->where(['q10' => '5'])->count());
+//count respondents
+		//$this->loadModel('Users');
+		//$this->set('q1_1', $this->Sus->find()->where(['q1' => '1'])->count());
+		
+		$this->set(compact('total_respondent'));
     }
 	
     public function indexArchived()
